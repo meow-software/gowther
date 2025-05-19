@@ -34,7 +34,7 @@ export type ErrorMessages = {
  * 
  * @extends Error
  */
-export const Message: ErrorMessages = {
+export const Messages: ErrorMessages = {
     [GowtherErrorCodes.TokenInvalid]: 'An invalid token was provided.',
     [GowtherErrorCodes.RestClientNotInitialized]: 'Rest client is not initialized. Please provide options (IRestOptions).',
     [GowtherErrorCodes.HttpError]: 'HTTP error! status: ',

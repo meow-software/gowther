@@ -1,5 +1,5 @@
-import { GowtherErrorCodes } from "./error-code.type";
-import { Message } from "./message.type";
+import { GowtherErrorCodes, Messages } from "./error.type";
+
 
 /**
  * Custom error class to handle Gowhter errors.
@@ -8,6 +8,6 @@ import { Message } from "./message.type";
  */
 export class GowtherError extends Error {
     constructor(errorCode: GowtherErrorCodes, details: string = '') {
-        super(Message[errorCode] + details);
+        super(Messages[errorCode] + details);
     }
 }
