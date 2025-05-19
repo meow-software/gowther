@@ -1,3 +1,2 @@
-export * from './error-code.type';
-export * from './message.type';
+export * from './error.type';
 export * from './gowther-error';
