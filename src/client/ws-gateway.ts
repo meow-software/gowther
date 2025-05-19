@@ -10,22 +10,22 @@ import WebSocket from 'ws';
  */
 export class WsGateway implements IWsGateway {
     /** The active WebSocket instance, or null if disconnected */
-    private ws: WebSocket | null = null;
+    protected _ws: WebSocket | null = null;
 
     /** Connection options including URL, reconnection behavior, etc. */
-    private readonly options: IOptionWsGateway;
+    protected readonly options: IOptionWsGateway;
 
     /** Maximum number of reconnection attempts after disconnection */
-    private readonly reconnectAttempts: number;
+    protected readonly reconnectAttempts: number;
 
     /** Delay (in milliseconds) between reconnection attempts */
-    private readonly reconnectDelay: number;
+    protected readonly reconnectDelay: number;
 
     /** Internal counter to track how many reconnection attempts have been made */
-    private attemptCount: number = 0;
+    protected attemptCount: number = 0;
 
     /** Reference to the client instance for emitting application events */
-    private client: BaseClient;
+    protected client: BaseClient;
 
     /**
      * Creates a new instance of the WebSocket gateway.
@@ -45,28 +45,28 @@ export class WsGateway implements IWsGateway {
      * Automatically handles reconnection on disconnection.
      */
     public connect(): void {
-        if (this.ws) {
-            this.ws.close(); // Close any existing connection first.
+        if (this._ws) {
+            this._ws.close(); // Close any existing connection first.
         }
 
-        this.ws = new WebSocket(this.options.url);
+        this._ws = new WebSocket(this.options.url);
 
-        this.ws.on('open', () => {
+        this._ws.on('open', () => {
             this.client.emitEvent('connected');
             this.attemptCount = 0; // Reset reconnection counter
         });
 
-        this.ws.on('message', (data: string) => {
+        this._ws.on('message', (data: string) => {
             const parsedData = JSON.parse(data);
             this.client.emitEvent(parsedData.event, parsedData.data);
         });
 
-        this.ws.on('close', () => {
+        this._ws.on('close', () => {
             this.client.emitEvent('disconnected');
             this.handleReconnection();
         });
 
-        this.ws.on('error', (error: Error) => {
+        this._ws.on('error', (error: Error) => {
             this.client.emitEvent('error', error);
         });
     }
@@ -90,7 +90,7 @@ export class WsGateway implements IWsGateway {
      * Returns whether the WebSocket connection is currently open.
      */
     public isConnected(): boolean {
-        return !!this.ws && this.ws.readyState === WebSocket.OPEN;
+        return !!this._ws && this._ws.readyState === WebSocket.OPEN;
     }
 
     /**
@@ -100,10 +100,10 @@ export class WsGateway implements IWsGateway {
      * @param data - The data to send with the event.
      */
     public send(event: string, data: any): void {
-        if (!this.isConnected() || !this.ws) return this.client.emitEvent('error', new Error('WebSocket is not open'));
+        if (!this.isConnected() || !this._ws) return this.client.emitEvent('error', new Error('WebSocket is not open'));
         try {
             const message = JSON.stringify({ event, data });
-            this.ws.send(message);
+            this._ws.send(message);
         } catch (error) {
             this.client.emitEvent('error', new  GowtherError(GowtherErrorCodes.FailedToSerialize));
         }
@@ -113,9 +113,9 @@ export class WsGateway implements IWsGateway {
      * Closes the WebSocket connection if it's currently open.
      */
     public disconnect(): void {
-        if (this.ws) {
-            this.ws.close();
-            this.ws = null;
+        if (this._ws) {
+            this._ws.close();
+            this._ws = null;
         }
     }
 }
