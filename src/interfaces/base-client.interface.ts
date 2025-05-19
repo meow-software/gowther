@@ -1,9 +1,9 @@
-import { Rest } from "../client";
 import { IClientOptions } from "../utils/types";
+import { IRest } from "./rest.interface";
 import { IWsGateway } from "./ws-gateway.interface";
 
 export interface IBaseClient {
-    rest: Rest;
+    rest: IRest;
     wsGateway: IWsGateway;
     options: IClientOptions;
     destroy(): void;
