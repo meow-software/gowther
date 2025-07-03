@@ -1,5 +1,6 @@
 import { Action, IAction } from './action';
 import { ChannelCreateAction } from './channelCreate';
+import { MessageCreateAction } from './messageCreate';
  
 export class ActionsRegister {
   protected client;
@@ -7,6 +8,7 @@ export class ActionsRegister {
   constructor(client) {
     this.client = client;
     this.register(ChannelCreateAction);
+    this.register(MessageCreateAction);
     // TODO : register other actions, channel.., message create.. etc.
   }
 
