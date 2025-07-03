@@ -1,8 +1,10 @@
 import { GowtherError, GowtherErrorCodes } from "../errors";
 import { IWsGateway } from "../interfaces";
 import { IOptionWsGateway } from "../utils/types";
-import { BaseClient } from "./base-client.abstract";
+import { BaseClient } from "./baseClient.abstract";
 import WebSocket from 'ws';
+import { WsPacketHandlers } from "../handlers";
+
 
 /**
  * Represents a WebSocket gateway used to communicate with a real-time backend.
@@ -58,8 +60,10 @@ export class WsGateway implements IWsGateway {
 
         this._ws.on('message', (data: string) => {
             const parsedData = JSON.parse(data);
-            // TODO: Add handler system for events
-            this.client.emitEvent(parsedData.event, parsedData.data);
+            // this.client.emitEvent(parsedData.event, parsedData.data); // TODO : Remove after test WS packet handlers
+            if (WsPacketHandlers[parsedData.event]) {
+                WsPacketHandlers[parsedData.event](this.client, parsedData, this.client.shardId);
+            }
         });
 
         this._ws.on('close', () => {
