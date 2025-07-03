@@ -1,2 +1,2 @@
-export * from './abstracts/baseData';
+export * from './abstract/baseData';
 export *  from './message';
