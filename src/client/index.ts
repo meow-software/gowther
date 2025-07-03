@@ -1,4 +1,4 @@
 export * from './rest';
 export * from './client';
-export * from './base-client.abstract';
+export * from './baseClient.abstract';
 export * from './ws-gateway';

@@ -1,5 +1,5 @@
 import { IClientOptions } from '../utils/types';
-import { BaseClient } from './base-client.abstract';
+import { BaseClient } from './baseClient.abstract';
 
 export class Client extends BaseClient {
   private readyTimestamp = null;
