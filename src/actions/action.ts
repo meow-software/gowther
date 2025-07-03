@@ -5,7 +5,7 @@ export interface IAction {
     handle(data: any): any;
 }
 
-export class Action  implements IAction {
+export class  Action  implements IAction {
     public readonly client : BaseClient;
     constructor(client) {
         this.client = client;

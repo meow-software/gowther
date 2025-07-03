@@ -3,6 +3,7 @@ import { Rest } from './rest';
 import { IBaseClient, IRest, IWsGateway } from '../interfaces';
 import { DefaultClientOptions, IClientOptions } from '../utils/types';
 import { WsGateway } from './ws-gateway';
+import { ActionsRegister } from '../actions';
 
 /**
  * Abstract base class for all clients.
