@@ -1,5 +1,5 @@
 import { BaseClient } from "../client";
-import { Snowflake } from "..";
+import { IBaseData, Snowflake } from "..";
 
 /**
  * A generic constructor type.
@@ -114,7 +114,7 @@ export abstract class BaseDataManager<T extends DataType> implements IBaseDataMa
  *
  * @template T - The type of object being managed.
  */
-export class CachedManager<T extends DataType> extends BaseDataManager<T> {
+export class CachedManager<T extends DataType & IBaseData> extends BaseDataManager<T> {
   /**
    * Creates a new CachedManager.
    *
@@ -154,14 +154,13 @@ export class CachedManager<T extends DataType> extends BaseDataManager<T> {
     const existing = this.cache.get(dataId);
     if (existing) {
       if (cache) {
-        // Try to patch the existing object with new data if patch method is available.
-        // TODO : USE patch method to update the existing object with new data. 
+        // Try to patch the existing object with new data if patch method is available. 
+        existing.patch(data);
         return existing;
       }
-      // Clone the existing object, patch the clone, and return it (without caching).
-      // TODO : Use clone method to create a new instance of the existing object.
-      const clone = null; //
-      // TODO : Use patch method to update the clone with new data. 
+      // Clone the existing object, patch the clone, and return it (without caching). 
+      const clone = existing.clone(); //
+      clone.patch(data);
       return clone ?? existing;
     }
 
