@@ -169,4 +169,8 @@ export class CachedManager<T extends DataType & IBaseData> extends BaseDataManag
     if (cache) this.cache.set(dataId, entry);
     return entry;
   }
+
+  protected remove(id: Snowflake): void {
+    this.cache.delete(id);
+  }
 }

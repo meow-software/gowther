@@ -56,7 +56,7 @@ export class ChannelManager extends CachedManager<BaseChannel> {
         // TODO : a channelBuilder check type of channel and make channel
         const channel = channelBuilder(this.client, data, guild, { allowUnknownGuild });
         if (!channel) {
-            // TODO: Replace with a proper custom error (e.g., "Failed to create channel: unknown guild or invalid type")
+            // TODO: Replace with a proper custom gowther error (e.g., "Failed to create channel: unknown guild or invalid type")
             return null;
         }
 
@@ -64,5 +64,21 @@ export class ChannelManager extends CachedManager<BaseChannel> {
         if (cache && !allowUnknownGuild) this.cache.set(channel.id, channel);
 
         return channel;
+    }
+
+    /**
+     * Removes a channel from the cache and its associations.
+     *
+     * @param id - The ID of the channel to remove.
+     */
+    protected remove(id: Snowflake): void {
+        const channel = this.cache.get(id);
+        // TODO: guild in channel
+        // channel.guild.channels.cache.delete(id);
+
+        // Remove over association
+
+
+        this.cache.delete(id);
     }
 }
