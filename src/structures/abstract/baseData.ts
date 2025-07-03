@@ -1,4 +1,6 @@
+import { Snowflake } from "../..";
 import { IBaseClient } from "../../client";
+import { DataType } from "../../manager";
 
 /**
  * Interface representing the base structure of a data object.
@@ -39,12 +41,12 @@ export interface IBaseData {
  * 
  * @typeParam TClient - A type extending the IBaseClient interface.
  */
-export abstract class BaseData<TClient extends IBaseClient> implements IBaseData {
+export abstract class BaseData<TClient extends IBaseClient> implements IBaseData, DataType {
     /**
      * The client instance that this data object uses.
      */
     protected client: TClient;
-
+    protected _id! : Snowflake;
     /**
      * Constructs a new BaseData instance with a reference to the client.
      * 
@@ -53,6 +55,21 @@ export abstract class BaseData<TClient extends IBaseClient> implements IBaseData
     constructor(client: TClient) {
         this.client = client;
     }
+    
+    get id(): Snowflake {
+        return this._id;
+    }   
+
+    get createdTimestamp() {
+        // TODO: Add timestampFrom in Snowflake for extract date time
+        // return .timestampFrom(this.id);
+        return "todo"
+    }
+
+    get createdAt() {
+        return new Date(this.createdTimestamp);
+    }
+
 
     /**
      * Creates a shallow clone of the current object.

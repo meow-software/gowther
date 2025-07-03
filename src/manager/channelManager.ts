@@ -78,7 +78,6 @@ export class ChannelManager extends CachedManager<BaseChannel> {
 
         // Remove over association
 
-
         this.cache.delete(id);
     }
 }

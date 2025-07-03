@@ -1,7 +1,6 @@
 import { BaseClient, BaseData, DataType, Snowflake } from "..";
 
-export class Message extends BaseData<BaseClient>  implements DataType{
-    protected _id: Snowflake;
+export class Message extends BaseData<BaseClient>  implements DataType{ 
     protected client: BaseClient;
     // TODO: other properties from backend 
     // such as guildId, createdTimestamp etc.
@@ -11,10 +10,6 @@ export class Message extends BaseData<BaseClient>  implements DataType{
         this.client = client; 
         this.patch(data);
     } 
-
-    get id(): Snowflake {
-        return this._id;
-    }   
 
     patch(data: any) {
         this._id = data.id;
