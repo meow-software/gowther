@@ -1,10 +1,16 @@
-import { GowtherError, GowtherErrorCodes } from "../errors";
-import { IWsGateway } from "../interfaces";
+import { GowtherError, GowtherErrorCodes } from "../errors"; 
 import { IOptionWsGateway } from "../utils/types";
 import { BaseClient } from "./baseClient.abstract";
 import WebSocket from 'ws';
 import { WsPacketHandlers } from "../handlers";
 
+
+export interface IWsGateway {   
+    connect(): void;
+    isConnected(): boolean;
+    send(event: string, data: any): void ;
+    disconnect(): void;
+}
 
 /**
  * Represents a WebSocket gateway used to communicate with a real-time backend.

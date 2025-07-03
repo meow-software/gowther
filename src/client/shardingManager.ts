@@ -1,8 +1,10 @@
 import { EventEmitter } from 'events';
-import { spawn, ChildProcess } from 'child_process';
-import { IShardingManager } from '../interfaces';
+import { spawn, ChildProcess } from 'child_process'; 
 import { Client } from './client';
 import { IShardingOptions } from '../utils/types';
+
+export interface IShardingManager {
+}
 
 interface ShardInfo {
   id: number;

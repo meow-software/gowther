@@ -1,9 +1,17 @@
 import { EventEmitter } from 'events'; 
-import { Rest } from './rest';
-import { IBaseClient, IRest, IWsGateway } from '../interfaces';
+import { IRest, Rest } from './rest'; 
 import { DefaultClientOptions, IClientOptions } from '../utils/types';
-import { WsGateway } from './ws-gateway';
+import { IWsGateway, WsGateway } from './ws-gateway';
 import { ActionsRegister } from '../actions';
+
+export interface IBaseClient {
+    rest: IRest;
+    wsGateway: IWsGateway;
+    options: IClientOptions;
+    destroy(): void;
+    toJSON(props: any): any;
+    login(token: string): Promise<void>;
+}
 
 /**
  * Abstract base class for all clients.
