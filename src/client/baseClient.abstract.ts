@@ -3,6 +3,7 @@ import { IRest, Rest } from './rest';
 import { DefaultClientOptions, IClientOptions } from '../utils/types';
 import { IWsGateway, WsGateway } from './ws-gateway';
 import { ActionsRegister } from '../actions';
+import { ChannelManager } from '../manager';
 
 export interface IBaseClient {
     rest: IRest;
@@ -30,9 +31,10 @@ export abstract class BaseClient extends EventEmitter implements IBaseClient {
     /** Optional shard ID for multi-process or sharded deployments */
     protected _shardId: number | null = null; // TODO: Implement sharding, can't be null edit and set after add shardId system
 
-    
-    protected actions;
+    protected actions : ActionsRegister; // Register for handling actions
 
+    /** Cache manager for channels */
+    public channels: ChannelManager; 
     /**
      * Constructs a new BaseClient instance.
      *
@@ -51,7 +53,10 @@ export abstract class BaseClient extends EventEmitter implements IBaseClient {
         this.wsGateway = new WsGateway(this.options.WsGatewayOptions, this);
 
         // Set ActionsRegister for handling actions
-        this.actions = new ActionsRegister(this); // Todo: Implement actions register handler
+        this.actions = new ActionsRegister(this); 
+        
+        // Initialize cache managers
+        this.channels = new ChannelManager(this);
     }
 
     /**
