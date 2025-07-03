@@ -11,12 +11,17 @@ export class ChannelCreateAction extends Action {
   handle(data) {
     const client = this.client;
     console.log("ChannelCreateAction handle called with data:", data);
-    // TODO: check data.id in cache channels
+    // Check data.id in cache channels
+    const existing = client.channels.cache.has(data.id);
+    // Add data  in channels
+    const channel = client.channels.add(data);
 
-    // TODO: add data  in channels
-
-    // TODO: If the channel already exists, we do not emit the event again 
-
+    // If the channel already exists, we do not emit the event again 
+    if (!existing && channel) {
+      // TODO : use echo event
+      // client.emit(EchoEvent.ChannelCreate, channel);
+      client.emit(data.event, channel);
+    }
     return null;// TODO : return channel
   }
 }

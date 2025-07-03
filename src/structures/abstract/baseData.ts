@@ -56,6 +56,10 @@ export abstract class BaseData<TClient extends IBaseClient> implements IBaseData
         this.client = client;
     }
     
+    protected set id(id : Snowflake) {
+        this._id = id;
+    }
+
     get id(): Snowflake {
         return this._id;
     }   

@@ -18,4 +18,10 @@ export class BaseChannel  extends BaseData<BaseClient>  {
         
         // Not Update guildId here
     }
+
+    toString() {
+        // <#id>
+        // return formatChannelMention(this.id); // TODO: implement formatChannelMention
+        return this.id
+    }
 }

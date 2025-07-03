@@ -3,3 +3,4 @@ export * from './abstract/baseChannel';
 export * from './abstract/baseGuild';
 export *  from './message';
 export * from './dmChannel';
+export * from './guild'

@@ -1,4 +1,4 @@
-import { BaseChannel, Snowflake } from "..";
+import { BaseChannel, Guild, Snowflake } from "..";
 import { CachedManager, DataType } from "./cachedManager";
 
 /**
@@ -32,12 +32,12 @@ export class ChannelManager extends CachedManager<BaseChannel> {
     *   - `allowUnknownGuild` (optional): Whether to allow creating a channel without a known guild (default: `false`).
     * @returns The added or updated `BaseChannel` instance, or `null` if creation failed.
     */
-    protected add(
+    public add(
         data: BaseChannel,
-        params: any = {}
+        params: { guild: Guild; cache?: boolean; allowUnknownGuild?: boolean } = {} as any
     ): BaseChannel | null {
-        // { guild: any, cache? = true, allowUnknownGuild? = false } = {} 
-        const { guild, cache = true, allowUnknownGuild = false } = params;
+        // { guild: Guild, cache? = true, allowUnknownGuild? = false } = {} 
+        const { guild , cache = true, allowUnknownGuild = false } = params;
 
         // Check if the channel already exists in the cache
         const existing = this.cache.get(data.id);
@@ -46,7 +46,7 @@ export class ChannelManager extends CachedManager<BaseChannel> {
             if (cache) existing.patch(data);
 
             // Add the channel to the guild's cache (if the guild exists)
-            guild?.channels?._add(existing);
+            guild?.channels?.add(existing);
 
             // TODO: Check the channel type and add it to its parent's thread list if needed
             return existing;

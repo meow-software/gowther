@@ -143,9 +143,9 @@ export class CachedManager<T extends DataType & IBaseData> extends BaseDataManag
    *
    * @returns The instance of the managed data, or `null` if addition failed.
    */
-  protected add(
+  public add(
     data: T,
-    params: any = {}
+    params: { id?: Snowflake; extras?: any[]; cache?: boolean } = {} as any
   ): T | null {
     // { id?: Snowflake; extras?: any[]; cache?: boolean } = {}
     const { id, extras = [], cache = true } = params;
@@ -170,7 +170,7 @@ export class CachedManager<T extends DataType & IBaseData> extends BaseDataManag
     return entry;
   }
 
-  protected remove(id: Snowflake): void {
+  public remove(id: Snowflake): void {
     this.cache.delete(id);
   }
 }
