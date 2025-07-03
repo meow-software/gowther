@@ -10,6 +10,6 @@ class BaseChannel implements DataType {
 
 export class ChannelManager extends CachedManager<BaseChannel> {
     constructor(client, iterable?: Iterable<BaseChannel>) {
-        super(client, BaseChannel,  iterable); // TODO: edit BaseChannel as class and putin the constr
+        super(client, BaseChannel,  iterable); 
     }
 }
