@@ -33,6 +33,8 @@ export abstract class BaseClient extends EventEmitter implements IBaseClient {
 
     protected actions : ActionsRegister; // Register for handling actions
 
+    protected _guilds : GuildManager;
+
     /** Cache manager for channels */
     public channels: ChannelManager; 
     /**
@@ -57,6 +59,12 @@ export abstract class BaseClient extends EventEmitter implements IBaseClient {
         
         // Initialize cache managers
         this.channels = new ChannelManager(this);
+        // TODO: Guild manager
+        this.guilds = new GuildManager(this); 
+    }
+
+    public get guilds() : GuildManager {
+        return this._guilds;
     }
 
     /**
