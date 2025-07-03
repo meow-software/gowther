@@ -1,4 +1,4 @@
-import { BaseChannel, Guild, Snowflake } from "..";
+import { BaseChannel, channelBuilder, Guild, Snowflake } from "..";
 import { CachedManager, DataType } from "./cachedManager";
 
 /**
@@ -52,9 +52,8 @@ export class ChannelManager extends CachedManager<BaseChannel> {
             return existing;
         }
 
-        // Channel not found in cache — create a new one
-        // TODO : a channelBuilder check type of channel and make channel
-        const channel = channelBuilder(this.client, data, guild, { allowUnknownGuild });
+        // Channel not found in cache — create a new one 
+        const channel = channelBuilder(this.client, guild, data, allowUnknownGuild);
         if (!channel) {
             // TODO: Replace with a proper custom gowther error (e.g., "Failed to create channel: unknown guild or invalid type")
             return null;
@@ -71,7 +70,7 @@ export class ChannelManager extends CachedManager<BaseChannel> {
      *
      * @param id - The ID of the channel to remove.
      */
-    protected remove(id: Snowflake): void {
+    public remove(id: Snowflake): void {
         const channel = this.cache.get(id);
         // TODO: guild in channel
         // channel.guild.channels.cache.delete(id);
