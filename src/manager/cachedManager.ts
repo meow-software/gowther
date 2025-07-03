@@ -136,17 +136,21 @@ export class CachedManager<T extends DataType> extends BaseDataManager<T> {
    * Adds a new item to the manager (and optionally to the cache).
    *
    * @param data - The data to add.
-   * @param cache - Whether to store it in the internal cache. Defaults to `true`.
-   * @param options - Optional options including a custom ID and additional constructor arguments.
-   * @returns The instance of the managed data.
+   * @param params - An object containing additional parameters:
+   *   - `id` (optional): The unique identifier for the item.
+   *   - `extras` (optional): An array of extra data associated with the item (default: empty array).
+   *   - `cache` (optional): Whether to store the item in the internal cache (default: `true`).
+   *
+   * @returns The instance of the managed data, or `null` if addition failed.
    */
   protected add(
     data: T,
-    cache: boolean = true,
-    { id, extras = [] }: { id?: Snowflake; extras?: any[] } = {}
-  ): T {
-    const dataId = id ?? data.id;
+    params: any = {}
+  ): T | null {
+    // { id?: Snowflake; extras?: any[]; cache?: boolean } = {}
+    const { id, extras = [], cache = true } = params;
 
+    const dataId = id ?? data.id;
     const existing = this.cache.get(dataId);
     if (existing) {
       if (cache) {
