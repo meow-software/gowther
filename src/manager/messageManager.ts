@@ -1,8 +1,8 @@
 import { CachedManager, DataType } from "./cachedManager";
+import { Message } from "../structures";
 
-interface Message extends DataType { 
-}
-
-export class MessageManager extends CachedManager<Message> {
-
+export class MessageManager extends CachedManager<Message> { 
+    constructor(client, iterable?: Iterable<Message>) {
+        super(client, Message,  iterable); 
+    }
 }
