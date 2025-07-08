@@ -1,4 +1,4 @@
-import { BaseClient, BaseData, DataType, Snowflake } from "../..";
+import { BaseClient, BaseData, DataType, Routes, Snowflake } from "../..";
 
 export class BaseChannel  extends BaseData<BaseClient>  { 
     // TODO: other properties from backend 
@@ -17,6 +17,11 @@ export class BaseChannel  extends BaseData<BaseClient>  {
         // update other properties here
         
         // Not Update guildId here
+    }
+    
+    async delete(){
+        await this.client.rest.delete(Routes.channel(this.id));
+        return this;
     }
 
     toString() {
