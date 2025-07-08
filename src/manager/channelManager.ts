@@ -1,4 +1,4 @@
-import { BaseChannel, channelBuilder, Guild, Snowflake } from "..";
+import { BaseChannel, channelBuilder, Guild, Routes, Snowflake } from "..";
 import { CachedManager, DataType } from "./cachedManager";
 
 /**
@@ -34,10 +34,10 @@ export class ChannelManager extends CachedManager<BaseChannel> {
     */
     public add(
         data: BaseChannel,
-        params: { guild: Guild; cache?: boolean; allowUnknownGuild?: boolean } = {} as any
+        params: { guild?: Guild; cache?: boolean; allowUnknownGuild?: boolean } = {} as any
     ): BaseChannel | null {
         // { guild: Guild, cache? = true, allowUnknownGuild? = false } = {} 
-        const { guild , cache = true, allowUnknownGuild = false } = params;
+        const { guild, cache = true, allowUnknownGuild = false } = params;
 
         // Check if the channel already exists in the cache
         const existing = this.cache.get(data.id);
@@ -53,7 +53,7 @@ export class ChannelManager extends CachedManager<BaseChannel> {
         }
 
         // Channel not found in cache — create a new one 
-        const channel = channelBuilder(this.client, guild, data, allowUnknownGuild);
+        const channel = channelBuilder(this.client, data, allowUnknownGuild, guild);
         if (!channel) {
             // TODO: Replace with a proper custom gowther error (e.g., "Failed to create channel: unknown guild or invalid type")
             return null;
@@ -78,5 +78,15 @@ export class ChannelManager extends CachedManager<BaseChannel> {
         // Remove over association
 
         this.cache.delete(id);
+    }
+    
+    public async fetch(id: Snowflake,  params: { allowUnknownGuild? : boolean, cache?:boolean, force?: boolean } = {} as any ): Promise<BaseChannel | null> {
+        const { force = false, cache = true, allowUnknownGuild = false } = params;
+        if (!force) {
+            const existing = this.cache.get(id);
+            if (existing) return existing;
+        }
+        const data = await this.client.rest.get(Routes.channel(id));
+        return this.add(new BaseChannel(this.client, data),  { cache, allowUnknownGuild });
     }
 }
