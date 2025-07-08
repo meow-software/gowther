@@ -3,11 +3,11 @@ import { BaseClient, BaseData, ChannelType, DataType, Routes, Snowflake } from "
 export class BaseChannel extends BaseData<BaseClient> {
     // TODO: other properties from backend 
     // such as guildId, flags, createdTimestamp etc.
-    protected guildId: Snowflake;
+    protected _guildId: Snowflake;
     protected _type : ChannelType;
     constructor(client: BaseClient, data: any,) {
         super(client);
-        this.guildId = data.guildId;
+        this._guildId = data.guildId;
         this._id = data.id;
         this._type = data.type; 
         this.patch(data);

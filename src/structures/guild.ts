@@ -11,7 +11,7 @@ export class Guild extends BaseGuild {
     constructor(client: BaseClient, data: any) {
         super(client, data)
         // TODO Manager
-        // this._channels = new GuildChannelManager(this);
+        this._channels = new GuildChannelManager(this);
         // this._members = new GuildMemberManager(this);
         // this._roles = new new RoleManager(this);
         this._shardId = data.shardId;

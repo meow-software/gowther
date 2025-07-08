@@ -4,11 +4,16 @@ import { BaseClient } from './baseClient.abstract';
 export class Client extends BaseClient {
   private readyTimestamp = null;
   private token: string | null = null;
+  private _user: any; // Todo: Implement User class
 
   constructor(options?: Partial<IClientOptions>) {
     super(options);
 
   }
+  get user() {
+    return this._user;  
+  }
+
   /**
   * Logs the client in using the provided authentication token.
   * Establishes the WebSocket connection and sets up event listeners.
@@ -21,7 +26,8 @@ export class Client extends BaseClient {
 
     // Start the WebSocket connection via the WsGateway
     this.wsGateway.connect();
-
+    // Todo: Configure this.user with the authenticated user data
+    
     // Handle 'connected' event from the WebSocket gateway
     this.on('connected', () => {
       // Emit a 'ready' event once the client is successfully connected

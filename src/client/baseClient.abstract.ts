@@ -33,7 +33,7 @@ export abstract class BaseClient extends EventEmitter implements IBaseClient {
 
     protected actions : ActionsRegister; // Register for handling actions
 
-    protected _guilds : GuildManager;
+    protected _guilds : GuildManager; 
 
     /** Cache manager for channels */
     public channels: ChannelManager; 
@@ -66,6 +66,8 @@ export abstract class BaseClient extends EventEmitter implements IBaseClient {
     public get guilds() : GuildManager {
         return this._guilds;
     }
+
+    abstract get user() : User; // Todo: Implement user property
 
     /**
      * Returns the shard ID for this client instance, if any.
