@@ -259,3 +259,11 @@ export interface InternalRequest extends RequestData {
 	 */
 	method: RequestMethod;
 }
+
+export enum ChannelType {
+	DM,
+	GroupDM,
+	GuildText,
+	GuildCategory,
+	GuildVoice
+}

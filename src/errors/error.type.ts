@@ -20,6 +20,9 @@ export enum GowtherErrorCodes {
 
     /** Failed to deserialize the received data */
     FailedToDeserialize,
+
+    /** The channel is not cached */
+    ChannelNotCached,
 }
 
 /**
@@ -41,4 +44,5 @@ export const Messages: ErrorMessages = {
     [GowtherErrorCodes.MaxReconnectAttempts]: "Maximum reconnection attempts reached.",
     [GowtherErrorCodes.FailedToSerialize]: "Failed to serialize the data.",
     [GowtherErrorCodes.FailedToDeserialize]: "Failed to deserialize the data.",
+    [GowtherErrorCodes.ChannelNotCached]: "The channel was not cached.",
 };
