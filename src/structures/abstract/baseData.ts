@@ -45,7 +45,7 @@ export abstract class BaseData<TClient extends IBaseClient> implements IBaseData
     /**
      * The client instance that this data object uses.
      */
-    protected client: TClient;
+    protected _client: TClient;
     protected _id! : Snowflake;
     /**
      * Constructs a new BaseData instance with a reference to the client.
@@ -53,16 +53,21 @@ export abstract class BaseData<TClient extends IBaseClient> implements IBaseData
      * @param client - The client instance used by the data object.
      */
     constructor(client: TClient) {
-        this.client = client;
+        this._client = client;
+    }
+
+    get client(): TClient {
+        return this._client;
     }
     
-    protected set id(id : Snowflake) {
-        this._id = id;
-    }
 
     get id(): Snowflake {
         return this._id;
     }   
+    
+    protected set id(id : Snowflake) {
+        this._id = id;
+    }
 
     get createdTimestamp() {
         // TODO: Add timestampFrom in Snowflake for extract date time
