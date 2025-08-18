@@ -1,6 +1,7 @@
 import { CachedManager, DataType } from "./cachedManager";
 import { BaseChannel, Message } from "../structures";
-import { Routes, Snowflake } from "..";
+import { Routes } from "..";
+import { Snowflake } from "@tellme/shared-types";
 
 export class MessageManager extends CachedManager<Message> {
 
@@ -13,10 +14,12 @@ export class MessageManager extends CachedManager<Message> {
     
     async fetch(params?: { messageId?: Snowflake, message?: Message, cache?: boolean, force?: boolean }) {
         if (!params) return this.fetchMany();
-        const { messageId, message, cache = true, force = false } = params;
-        let resolvedMessage;
+        
+        const { messageId, message, cache = true, force = false } = params; 
         const toResolve = message ?? messageId;
-        if (toResolve) resolvedMessage = this.resolveId(toResolve);
+        if (!toResolve) return null; 
+        
+        const resolvedMessage = this.resolveId(toResolve);
         if (resolvedMessage) return this.fetchSingle({ messageId: resolvedMessage, cache, force });
         return this.fetchMany({ cache });
     }

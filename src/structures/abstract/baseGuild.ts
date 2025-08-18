@@ -1,4 +1,5 @@
-import { BaseClient, BaseData, Snowflake } from "../..";
+import { BaseClient, BaseData } from "../..";
+import { Snowflake } from "@tellme/shared-types";
 
 export abstract class BaseGuild extends BaseData<BaseClient> {
     protected _icon: string | null;

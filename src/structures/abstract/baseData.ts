@@ -1,4 +1,4 @@
-import { Snowflake } from "../..";
+import { Snowflake } from "@tellme/shared-types";
 import { IBaseClient } from "../../client";
 import { DataType } from "../../manager";
 

@@ -1,4 +1,5 @@
 import { Action } from "./action";
+import { GowtherEvent } from "@tellme/shared-types"
 /**
  * Handles the event when a new channel is created.
  */
@@ -18,9 +19,7 @@ export class ChannelCreateAction extends Action {
 
     // If the channel already exists, we do not emit the event again 
     if (!existing && channel) {
-      // TODO : use echo event
-      // client.emit(EchoEvent.ChannelCreate, channel);
-      client.emit(data.event, channel);
+      client.emit(GowtherEvent.ChannelCreate, channel);
     }
     return null;// TODO : return channel
   }

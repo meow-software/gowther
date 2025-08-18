@@ -1,4 +1,5 @@
-import { BaseChannel, channelBuilder, Guild, Routes, Snowflake } from "..";
+import { Snowflake } from "@tellme/shared-types";
+import { BaseChannel, channelBuilder, Guild, Routes } from "..";
 import { CachedManager, DataType } from "./cachedManager";
 
 /**

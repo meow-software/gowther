@@ -3,7 +3,7 @@ import { IRest, Rest } from './rest';
 import { DefaultClientOptions, IClientOptions } from '../utils/types';
 import { IWsGateway, WsGateway } from './ws-gateway';
 import { ActionsRegister } from '../actions';
-import { ChannelManager } from '../manager';
+import { ChannelManager, GuildManager } from '../manager';
 
 export interface IBaseClient {
     rest: IRest;
@@ -60,13 +60,13 @@ export abstract class BaseClient extends EventEmitter implements IBaseClient {
         // Initialize cache managers
         this.channels = new ChannelManager(this);
         // TODO: Guild manager
-        this.guilds = new GuildManager(this); 
+        this._guilds = new GuildManager(this); 
     }
 
     public get guilds() : GuildManager {
         return this._guilds;
     }
-
+ 
     abstract get user() : User; // Todo: Implement user property
 
     /**

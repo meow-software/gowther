@@ -1,4 +1,5 @@
-import { BaseClient, BaseData, DataType, GowtherError, GowtherErrorCodes, Snowflake } from "..";
+import { BaseClient, BaseData, DataType, GowtherError, GowtherErrorCodes } from "..";
+import { Snowflake } from "@tellme/shared-types";
 
 export class Message extends BaseData<BaseClient> implements DataType { 
     protected _channel: Snowflake;

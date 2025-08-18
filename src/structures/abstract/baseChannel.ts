@@ -1,4 +1,5 @@
-import { BaseClient, BaseData, ChannelType, DataType, Routes, Snowflake } from "../..";
+import { BaseClient, BaseData, ChannelType, DataType, Routes } from "../..";
+import { Snowflake } from "@tellme/shared-types";
 
 export class BaseChannel extends BaseData<BaseClient> {
     // TODO: other properties from backend 

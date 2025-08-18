@@ -1,4 +1,4 @@
-import { Snowflake } from "..";
+import { Snowflake } from "@tellme/shared-types";
 
 export const APIVersion = '1';
 
@@ -30,5 +30,16 @@ export const Routes = {
 	 */
 	channelMessage(channelId: Snowflake, messageId: Snowflake) {
 		return `/channels/${channelId}/messages/${messageId}` as const;
+	},
+    /**
+	 * Route for:
+	 * - POST `/guilds/${guildId}` When guildId is undefined
+	 * - GET    `/guilds/${guildId}`
+	 * - PATCH  `/guilds/${guildId}`
+	 * - DELETE `/guilds/${guildId}`
+	 */
+	guild(guildId?: Snowflake) {
+		if (!guildId)	return `/guilds` as const; // For creating a new guild
+		return `/guilds/${guildId}` as const;
 	},
 }
