@@ -4,7 +4,7 @@ import { GuildChannelManager } from "../manager";
 
 export class Guild extends BaseGuild {
     // Todo Manager
-    protected _channels;
+    protected _channels : GuildChannelManager;
     // protected _members;
     // protected _roles;
     protected _shardId: number;

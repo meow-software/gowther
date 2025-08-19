@@ -17,10 +17,12 @@ export class GuildChannelManager extends CachedManager<GuildChannel> {
 
     async create({
         name,
+        parentId
     }) {
         return await this.client.rest.post(Routes.guild(),
             jsonRestRequest({
                 name,
+                parentId
             },
         ));
     }

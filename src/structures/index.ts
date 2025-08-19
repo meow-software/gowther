@@ -5,5 +5,6 @@ export * from './abstract/baseGuildTextChannel';
 export *  from './message';
 export * from './dmChannel';
 export * from './textChannel';
+export * from './categoryChannel';
 export * from './guildChannel';
 export * from './guild'
