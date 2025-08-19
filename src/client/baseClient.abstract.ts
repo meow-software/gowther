@@ -31,7 +31,7 @@ export abstract class BaseClient extends EventEmitter implements IBaseClient {
     /** Optional shard ID for multi-process or sharded deployments */
     protected _shardId: number | null = null; // TODO: Implement sharding, can't be null edit and set after add shardId system
 
-    protected actions : ActionsRegister; // Register for handling actions
+    protected _actions : ActionsRegister; // Register for handling actions
 
     protected _guilds : GuildManager; 
 
@@ -55,16 +55,18 @@ export abstract class BaseClient extends EventEmitter implements IBaseClient {
         this.wsGateway = new WsGateway(this.options.WsGatewayOptions, this);
 
         // Set ActionsRegister for handling actions
-        this.actions = new ActionsRegister(this); 
+        this._actions = new ActionsRegister(this); 
         
         // Initialize cache managers
         this.channels = new ChannelManager(this);
-        // TODO: Guild manager
         this._guilds = new GuildManager(this); 
     }
 
     public get guilds() : GuildManager {
         return this._guilds;
+    }
+    public get actions() : ActionsRegister {
+        return this._actions;   
     }
  
     abstract get user() : User; // Todo: Implement user property

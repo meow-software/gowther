@@ -23,6 +23,12 @@ export enum GowtherErrorCodes {
 
     /** The channel is not cached */
     ChannelNotCached,
+
+    /** The type is invalid */
+    InvalidType,
+
+    /** Action is not registered */ 
+    ActionNotRegistered = 'ActionNotRegistered',
 }
 
 /**
@@ -45,4 +51,6 @@ export const Messages: ErrorMessages = {
     [GowtherErrorCodes.FailedToSerialize]: "Failed to serialize the data.",
     [GowtherErrorCodes.FailedToDeserialize]: "Failed to deserialize the data.",
     [GowtherErrorCodes.ChannelNotCached]: "The channel was not cached.",
+    [GowtherErrorCodes.InvalidType]: "The provided value is not of the expected type.",
+    [GowtherErrorCodes.ActionNotRegistered]: "The requested action is not registered.",
 };

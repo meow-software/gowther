@@ -1,5 +1,6 @@
 import { BaseGuild } from ".";
 import { BaseClient } from "../client";
+import { GuildChannelManager } from "../manager";
 
 export class Guild extends BaseGuild {
     // Todo Manager
@@ -10,9 +11,9 @@ export class Guild extends BaseGuild {
 
     constructor(client: BaseClient, data: any) {
         super(client, data)
-        // TODO Manager
-        this._channels = new GuildChannelManager(this);
-        // this._members = new GuildMemberManager(this);
+        // TODO Manager his
+        this._channels = new GuildChannelManager(this, this);
+        // this._members = new GuildMemberManager(this); // todo todo1
         // this._roles = new new RoleManager(this);
         this._shardId = data.shardId;
 

@@ -1,14 +1,14 @@
-import { BaseClient } from "../../client";
-import { Guild } from "../guild";
-import { BaseChannel } from "./baseChannel";
+import { BaseClient } from "../client";
+import { Guild } from "./guild";
+import { BaseChannel } from "./abstract/baseChannel";
 
-export class BaseGuildChannel extends BaseChannel {
+export class GuildChannel extends BaseChannel {
     protected _name: string;
     protected rawPosition: number;
     protected parentId: string | null;
     protected _guildId: string;
 
-    // Todo: Implement guild channel specific properties and methods
+    // Todo: Implement guild channel specific properties and methods his
     // permissions etc.
     constructor(client: BaseClient, data: any) {
         super(client, data);

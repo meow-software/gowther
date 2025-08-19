@@ -1,38 +1,45 @@
-import { BaseClient } from '../client';
-import { Action, IAction } from './action';
+import { BaseClient } from '../client'; 
+import { GowtherError, GowtherErrorCodes } from '../errors';
+import { Action } from './action';
 import { ChannelCreateAction } from './channelCreate';
 import { MessageCreateAction } from './messageCreate';
 
-/**
- * Responsible for registering and managing all available actions.
- * Automatically instantiates action classes and assigns them dynamically.
- */
 export class ActionsRegister {
-  /** The shared client instance used across all actions */
   protected client: BaseClient;
+  private actions: Map<string, Action> = new Map();
 
-  /**
-   * Creates a new ActionsRegister instance and registers initial actions.
-   * @param client - The client instance to be injected into actions.
-   */
   constructor(client: BaseClient) {
     this.client = client;
 
     // Register default actions
     this.register(ChannelCreateAction);
     this.register(MessageCreateAction);
-
-    // TODO: Register additional actions (e.g., ChannelDeleteAction, UserJoinAction, etc.)
+    // this.register(ChannelDeleteAction); etc.
   }
 
   /**
-   * Dynamically registers an action class by its name.
-   * Creates an instance of the action and assigns it to the current instance.
-   * Example: `this.ChannelCreateAction = new ChannelCreateAction(this.client);`
-   * 
-   * @param action - The action class (must extend Action).
+   * Register an action class and store it in the map.
    */
   public register(action: typeof Action) {
-    this[action.name] = new action(this.client);
+    const instance = new action(this.client);
+    this.actions.set(action.name, instance);
+  }
+
+  /**
+   * Retrieve an action instance by name.
+   */
+  public get<T extends Action>(name: string): T | undefined {
+    return this.actions.get(name) as T | undefined;
+  }
+
+  /**
+   * Execute a handler by action name if it exists.
+   */
+  public handle(name: string, payload: any) {
+    const action = this.actions.get(name);
+    if (!action) {
+    throw new GowtherError(GowtherErrorCodes.ActionNotRegistered, `Action '${name}' not registered.`);
+    }
+    return action.handle(payload);
   }
 }

@@ -1,7 +1,7 @@
 import { BaseClient } from "../client";
 import { BaseChannel, Guild } from "../structures";
 import { ChannelType } from "./types";
-// TODO: Synchronise with ChannelType in Backend
+// TODO: Synchronise with ChannelType in Backend his
 
 export function channelBuilder(client: BaseClient, data: any, allowUnknownGuild: boolean,  guild?: Guild) : BaseChannel{
     const resolvedGuild = guild ?? client.guilds.cache.get(data.guildId);

@@ -14,7 +14,7 @@ export class MessageManager extends CachedManager<Message> {
     
     async fetch(params?: { messageId?: Snowflake, message?: Message, cache?: boolean, force?: boolean }) {
         if (!params) return this.fetchMany();
-        
+
         const { messageId, message, cache = true, force = false } = params; 
         const toResolve = message ?? messageId;
         if (!toResolve) return null; 
@@ -26,6 +26,7 @@ export class MessageManager extends CachedManager<Message> {
 
     protected async fetchMany(params: { cache: boolean } = { cache: true } as any) {
         // TODO: Implement fetchMany logic
+        console.warn("fetchMany is not implemented yet in MessageManager.");
     }
 
     protected async fetchSingle(params: { messageId: Snowflake, cache?: boolean, force?: boolean }) {
