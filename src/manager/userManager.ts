@@ -24,7 +24,7 @@ export class UserManager extends CachedManager<User> {
     }
 
     async createDM(user: UserResolvable, { cache = true, force = false } = {}) {
-        const id = this.resolveId(user);
+        const id = this.resolveId(user)!;
 
         if (!force) return this.dmChannel(id);
 
@@ -33,8 +33,8 @@ export class UserManager extends CachedManager<User> {
         return this.dmChannel(id); // todo
     }
 
-    async deleteDM(user) {
-        const id = this.resolveId(user);
+    async deleteDM(user : UserResolvable) {
+        const id = this.resolveId(user)!;
         const dmChannel = this.dmChannel(id);
         if (!dmChannel) throw new GowtherError(GowtherErrorCodes.UserNoDMChannel);
         await this.client.rest.delete(Routes.channel(dmChannel.id));
@@ -43,7 +43,7 @@ export class UserManager extends CachedManager<User> {
     }
 
     async fetch(user: UserResolvable, { cache = true, force = false } = {}) {
-        const id = this.resolveId(user);
+        const id = this.resolveId(user)!;
         if (!force) {
             const existing = this.cache.get(id);
         }

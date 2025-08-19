@@ -1,5 +1,6 @@
 import { BaseClient } from "../client";
-import { IBaseData, Snowflake } from "..";
+import { IBaseData } from "..";
+import { Snowflake } from "@tellme/shared-types";
 
 /**
  * A generic constructor type.

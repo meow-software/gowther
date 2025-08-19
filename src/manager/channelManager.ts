@@ -2,7 +2,7 @@ import { Snowflake } from "@tellme/shared-types";
 import { BaseChannel, BaseGuildTextChannel, channelBuilder, DMChannel, GowtherError, GowtherErrorCodes, Guild, GuildChannel, jsonRestRequest, Message, MessageCreateOptions, Routes, TextBasedChannel } from "..";
 import { CachedManager, DataType } from "./cachedManager";
 
-export type ChannelResolvable = Snowflake | BaseChannel ;
+export type ChannelResolvable = Snowflake | BaseChannel;
 
 /**
  * Manages and caches channels.
@@ -92,12 +92,11 @@ export class ChannelManager extends CachedManager<BaseChannel> {
         return this.add(new BaseChannel(this.client, data), { cache, allowUnknownGuild });
     }
 
-    async createMessage(channel: ChannelResolvable, payload: MessageCreateOptions) {  
+    async createMessage(channel: ChannelResolvable, payload: MessageCreateOptions) {
         const resolvedChannelId = this.resolveId(channel);
-        const resolvedChannel = this.resolve(channel) as TextBasedChannel;
+        const data = await this.client.rest.post(Routes.channelMessages(resolvedChannelId!), jsonRestRequest(payload));
         
-        const data = await this.client.rest.post(Routes.channelMessages(resolvedChannelId), jsonRestRequest(payload));
-
+        const resolvedChannel = this.resolve(channel) as TextBasedChannel;
         return resolvedChannel?.messages.add(new Message(this.client, data));
     }
 }

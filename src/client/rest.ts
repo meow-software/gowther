@@ -1,5 +1,5 @@
 import { GowtherError, GowtherErrorCodes } from "../errors";
-import { AuthData, InternalRequest, IRestOptions, RequestData, RequestMethod, RouteLike } from "../utils/types";
+import { AuthData, InternalRequest, IRestOptions, RequestData, RequestMethod, RouteLike } from "@tellme/shared-types";
 
 export interface IRest {
     /**

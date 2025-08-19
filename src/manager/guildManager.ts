@@ -25,6 +25,8 @@ export class GuildManager extends CachedManager<Guild> {
         if (!toResolve) return null;
 
         const resolvedGuild = this.resolveId(toResolve);
+        if (!resolvedGuild) return null;
+        
         if (!force) {
             const existing = this.cache.get(resolvedGuild);
             if (existing) return existing;

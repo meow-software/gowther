@@ -45,8 +45,10 @@ export class GuildChannel extends BaseChannel {
         return guild;
     }
     get parent(): GuildChannel | null {
+        if (!this.parentId) return null;
         return this.guild.channels.resolve(this.parentId);
     }
+    
     get parentId(): Snowflake | null {
         return this._parentId;
     }

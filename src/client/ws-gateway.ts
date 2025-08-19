@@ -1,5 +1,5 @@
 import { GowtherError, GowtherErrorCodes } from "../errors"; 
-import { IOptionWsGateway } from "../utils/types";
+import { IOptionWsGateway } from "@tellme/shared-types";
 import { BaseClient } from "./baseClient.abstract";
 import WebSocket from 'ws';
 import { WsPacketHandlers } from "../handlers";
