@@ -1,9 +1,9 @@
 import { BaseClient } from "../../client";
-import { DMMessageManager, GuildMessageManager } from "../../manager";
-import { BaseChannel } from "./baseChannel";
+import { GuildMessageManager } from "../../manager";
+import { GuildChannel } from "../guildChannel";
 import { ChannelType, Snowflake } from "@tellme/shared-types";
 
-export abstract class BaseGuildTextChannel extends BaseChannel {
+export abstract class BaseGuildTextChannel extends GuildChannel {
     protected _type: ChannelType;
     protected _messages: GuildMessageManager;
     protected _nsfw = false; // Indicates if the channel is marked as NSFW
