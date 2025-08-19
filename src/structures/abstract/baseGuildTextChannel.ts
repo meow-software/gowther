@@ -1,31 +1,24 @@
-import { BaseClient } from "../client";
-import { DMMessageManager, GuildMessageManager } from "../manager";
-import { BaseChannel } from "./abstract/baseChannel";
+import { BaseClient } from "../../client";
+import { DMMessageManager, GuildMessageManager } from "../../manager";
+import { BaseChannel } from "./baseChannel";
 import { ChannelType, Snowflake } from "@tellme/shared-types";
 
-export class BaseGuildTextChannel extends BaseChannel {
+export abstract class BaseGuildTextChannel extends BaseChannel {
     protected _type: ChannelType;
     protected _messages: GuildMessageManager;
-    protected recipientId: Snowflake | null = null;
     protected _nsfw = false; // Indicates if the channel is marked as NSFW
-    protected _topic: string;
+    protected _topic: string="";
     protected _lastMessageId: Snowflake | null = null; // Last message ID in this channel
 
     constructor(client: BaseClient, data: any) {
         super(client, data);
-        this._type = ChannelType.DM;
+        this._type = ChannelType.GuildText;
         this._messages = new GuildMessageManager(this);
         this.patch(data);
     }
 
     public patch(data: any) {
         super.patch(data);
-
-        if (data.recipients) {
-            const recipient = data.recipients[0];
-            this.recipientId = recipient[0];
-            this.client.users.add(recipient); // Todo todo1
-        }
 
         if ('last_message_id' in data) {
             this._lastMessageId = data.last_message_id;
@@ -48,7 +41,7 @@ export class BaseGuildTextChannel extends BaseChannel {
     }
     toString() {
         //  <#123456789012345678>! todo
-        // return channelMention(this.recipientId);
+        // return channelMention(this.id);
         return `<#${this.id}>`;
     }
 
