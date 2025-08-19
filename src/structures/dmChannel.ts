@@ -2,7 +2,8 @@ import { BaseClient } from "../client";
 import { DMMessageManager } from "../manager";
 import { BaseChannel } from "./abstract/baseChannel";
 import { ChannelType, Snowflake } from "@tellme/shared-types";
-import { Message } from "./message";
+import { MessageCreateOptions } from "./message";
+import { User } from "./user";
 
 export class DMChannel extends BaseChannel {
     protected _type: ChannelType;
@@ -24,7 +25,7 @@ export class DMChannel extends BaseChannel {
     public get messages() {
         return this._messages;
     }
-    public get recipient(): Snowflake | null {
+    public get recipient(): User | undefined {
         return this.client.users.cache.get(this.recipientId);
     }
     public get recipientId(): Snowflake {
@@ -47,7 +48,7 @@ export class DMChannel extends BaseChannel {
         return this.lastMessageId ? this.messages.cache.get(this.lastMessageId) : null;
     }
 
-    public send(content: Message | string) {  
+    public send(content: MessageCreateOptions) {  
         // TODO: Implement send method to send a message in this DM channel
     }
     toString() {

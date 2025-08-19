@@ -1,5 +1,7 @@
-import { BaseClient, BaseData, Routes } from "../..";
+import { BaseClient, BaseData, BaseGuildTextChannel, DMChannel, Routes } from "../..";
 import { ChannelType } from "@tellme/shared-types";
+
+export type TextBasedChannel = BaseGuildTextChannel | DMChannel;
 
 export class BaseChannel extends BaseData<BaseClient> {
     // TODO: other properties from backend 

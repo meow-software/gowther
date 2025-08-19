@@ -1,6 +1,6 @@
 import { CachedManager, DataType } from "./cachedManager";
-import { BaseChannel, Message } from "../structures";
-import { Routes } from "..";
+import { BaseChannel, Message, MessageResolvable } from "../structures";
+import { GowtherError, GowtherErrorCodes, Routes } from "..";
 import { Snowflake } from "@tellme/shared-types";
 
 export class MessageManager extends CachedManager<Message> {
@@ -38,5 +38,13 @@ export class MessageManager extends CachedManager<Message> {
 
         const data = await this.client.rest.get(Routes.channelMessage(this.channel.id, messageId));
         return this.add(new Message(this.client, data), { cache });
+    }
+
+    async delete(message : MessageResolvable) { 
+        const resolvedMessage = this.resolveId(message);
+        if (!resolvedMessage) throw new GowtherError(GowtherErrorCodes.InvalidType, "Message not found in cache or invalid ID.");
+        
+        await this.client.rest.delete(Routes.channelMessage(this.channel.id, resolvedMessage)); // todo check if success
+        this.cache.delete(resolvedMessage);
     }
 }

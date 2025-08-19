@@ -1,6 +1,8 @@
 import { Snowflake } from "@tellme/shared-types";
-import { BaseChannel, channelBuilder, GowtherError, GowtherErrorCodes, Guild, GuildChannel, Routes } from "..";
+import { BaseChannel, BaseGuildTextChannel, channelBuilder, DMChannel, GowtherError, GowtherErrorCodes, Guild, GuildChannel, jsonRestRequest, Message, MessageCreateOptions, Routes, TextBasedChannel } from "..";
 import { CachedManager, DataType } from "./cachedManager";
+
+export type ChannelResolvable = Snowflake | BaseChannel ;
 
 /**
  * Manages and caches channels.
@@ -79,14 +81,23 @@ export class ChannelManager extends CachedManager<BaseChannel> {
 
         this.cache.delete(id);
     }
-    
-    public async fetch(id: Snowflake,  params: { allowUnknownGuild? : boolean, cache?:boolean, force?: boolean } = {} as any ): Promise<BaseChannel | null> {
+
+    public async fetch(id: Snowflake, params: { allowUnknownGuild?: boolean, cache?: boolean, force?: boolean } = {} as any): Promise<BaseChannel | null> {
         const { force = false, cache = true, allowUnknownGuild = false } = params;
         if (!force) {
             const existing = this.cache.get(id);
             if (existing) return existing;
         }
         const data = await this.client.rest.get(Routes.channel(id));
-        return this.add(new BaseChannel(this.client, data),  { cache, allowUnknownGuild });
+        return this.add(new BaseChannel(this.client, data), { cache, allowUnknownGuild });
+    }
+
+    async createMessage(channel: ChannelResolvable, payload: MessageCreateOptions) {  
+        const resolvedChannelId = this.resolveId(channel);
+        const resolvedChannel = this.resolve(channel) as TextBasedChannel;
+        
+        const data = await this.client.rest.post(Routes.channelMessages(resolvedChannelId), jsonRestRequest(payload));
+
+        return resolvedChannel?.messages.add(new Message(this.client, data));
     }
 }

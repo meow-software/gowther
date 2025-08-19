@@ -1,6 +1,6 @@
 import { ChannelType, Snowflake } from "@tellme/shared-types";
 import { BaseClient } from "../client";
-import { DMChannel, Message, User } from "../structures";
+import { DMChannel, Message, MessageCreateOptions, User } from "../structures";
 import { CachedManager } from "./cachedManager";
 import { Routes } from "../utils";
 import { GowtherError, GowtherErrorCodes } from "../errors";
@@ -52,7 +52,7 @@ export class UserManager extends CachedManager<User> {
         return this.add(new User(this.client, data), {cache});
     }
 
-    async send(user: UserResolvable, message: Message | string) {
+    async send(user: UserResolvable, message: MessageCreateOptions) {
         const dmChannel = await this.createDM(user);
         if (!dmChannel) throw new GowtherError(GowtherErrorCodes.UserNoDMChannel);
         return dmChannel.send(message);

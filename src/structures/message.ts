@@ -1,17 +1,21 @@
-import { BaseClient, BaseData, DataType, GowtherError, GowtherErrorCodes } from "..";
-import { Snowflake } from "@tellme/shared-types";
+import { BaseClient, BaseData, BaseGuildTextChannel, DataType, DMChannel, GowtherError, GowtherErrorCodes, TextBasedChannel } from "..";
+import { ChannelType, Snowflake } from "@tellme/shared-types";
 
-export class Message extends BaseData<BaseClient> implements DataType { 
-    protected _channel: Snowflake;
+export type MessageResolvable = Snowflake | Message;
+export type MessageCreateOptions = String;
+
+export class Message extends BaseData<BaseClient> implements DataType {
+    protected _channelId: Snowflake;
     // TODO: other properties from backend 
     // such as guildId, createdTimestamp etc.
     constructor(client: BaseClient, data: any) {
         super(client);
-        this._id = data.id; 
+        this._id = data.id;
+        this._channelId = data.channelId;
         this.patch(data);
     }
     get channel() {
-        return this._channel;
+        return this.client.channels.cache.get(this._channelId);
     }
 
     patch(data: any) {
@@ -22,8 +26,8 @@ export class Message extends BaseData<BaseClient> implements DataType {
     }
 
     async delete() {
-        if (!this.channel) throw new GowtherError(GowtherErrorCodes.ChannelNotCached); 
-        await this.channel.messages.delete(this.id);
+        const channel = this.channel as TextBasedChannel; 
+        await channel.messages.delete(this.id); 
         return this;
     }
 

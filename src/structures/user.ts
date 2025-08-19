@@ -1,6 +1,7 @@
 import { BaseClient } from "../client";
+import { BaseChannel } from "./abstract/baseChannel";
 import { BaseData } from "./abstract/baseData";
-import { Message } from "./message";
+import { MessageCreateOptions } from "./message";
 export class User extends BaseData<BaseClient> {
     protected _username: string;
     protected _avatar: string | null = null;
@@ -29,10 +30,10 @@ export class User extends BaseData<BaseClient> {
         return this.client.users.deleteDM(this.id);
     }
 
-    async send(message: Message) {
+    async send(message: MessageCreateOptions) {
         const dmChannel = await this.createDM();
 
-        return this.client.channels.createMessage(dmChannel, options);
+        return this.client.channels.createMessage(dmChannel as BaseChannel, message);
     }
 
     async fetch(force = true) {
