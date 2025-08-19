@@ -14,6 +14,7 @@ export class DMChannel extends BaseChannel {
         super(client, data);
         this._type = ChannelType.DM;
         this._messages = new DMMessageManager(this);
+        this.patch(data);
     }
     public get type(): ChannelType {
         return this._type;
@@ -42,13 +43,14 @@ export class DMChannel extends BaseChannel {
     public getLastMessage() {
         return this.lastMessageId ? this.messages.cache.get(this.lastMessageId) : null;
     }
-    
+
     public send(content: string) {  
         // TODO: Implement send method to send a message in this DM channel
     }
     toString() {
-        //  <@123456789012345678>!
-        return userMention(this.recipientId);
+        //  <@123456789012345678> todo
+        // return userMention(this.recipientId);
+        return `<@${this.id}>`;
     }
 
 }
