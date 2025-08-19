@@ -1,14 +1,12 @@
-import { BaseClient, BaseData, ChannelType, DataType, Routes } from "../..";
-import { Snowflake } from "@tellme/shared-types";
+import { BaseClient, BaseData, Routes } from "../..";
+import { ChannelType } from "@tellme/shared-types";
 
 export class BaseChannel extends BaseData<BaseClient> {
     // TODO: other properties from backend 
-    // such as guildId, flags, createdTimestamp etc.
-    protected _guildId: Snowflake;
+    // such as flags, createdTimestamp etc.
     protected _type : ChannelType;
     constructor(client: BaseClient, data: any,) {
         super(client);
-        this._guildId = data.guildId;
         this._id = data.id;
         this._type = data.type; 
         this.patch(data);

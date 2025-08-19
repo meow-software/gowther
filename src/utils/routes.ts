@@ -42,4 +42,16 @@ export const Routes = {
 		if (!guildId)	return `/guilds` as const; // For creating a new guild
 		return `/guilds/${guildId}` as const;
 	},
+
+    /**
+	 * Route for:
+	 * - POST `/user/${userId}` When user is undefined
+	 * - GET    `/user/${userId}`
+	 * - PATCH  `/user/${userId}`
+	 * - DELETE `/user/${userId}`
+	 */
+	user(userId?: Snowflake) {
+		if (!userId)	return `/user` as const; // For creating a new user
+		return `/user/${userId}` as const;
+	},
 }

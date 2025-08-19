@@ -1,17 +1,21 @@
-import { IClientOptions } from '../utils/types';
+import { IClientOptions } from '@tellme/shared-types';
 import { BaseClient } from './baseClient.abstract';
+import { ClientUser, User } from '../structures';
 
 export class Client extends BaseClient {
   private readyTimestamp = null;
-  private token: string | null = null;
-  private _user: any; // Todo: Implement User class
+  protected token: string | null = null;
+  private _user!: User; // Todo: Implement User class
 
   constructor(options?: Partial<IClientOptions>) {
     super(options);
 
   }
   get user() {
-    return this._user;  
+    return this._user;
+  }
+  setToken(token: string) {
+    this.token = token;
   }
 
   /**
@@ -26,8 +30,14 @@ export class Client extends BaseClient {
 
     // Start the WebSocket connection via the WsGateway
     this.wsGateway.connect();
-    // Todo: Configure this.user with the authenticated user data
     
+    this._user = new ClientUser(this, {
+      id: '123456789012345678',
+      username: 'exampleUser',
+      avatar: null,
+      bot: false,
+    });
+
     // Handle 'connected' event from the WebSocket gateway
     this.on('connected', () => {
       // Emit a 'ready' event once the client is successfully connected

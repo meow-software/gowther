@@ -2,11 +2,12 @@ import { BaseClient } from "../client";
 import { DMMessageManager } from "../manager";
 import { BaseChannel } from "./abstract/baseChannel";
 import { ChannelType, Snowflake } from "@tellme/shared-types";
+import { Message } from "./message";
 
 export class DMChannel extends BaseChannel {
     protected _type: ChannelType;
     protected _messages: DMMessageManager;
-    protected recipientId: Snowflake | null = null; // ID of the recipient in this DM channel
+    protected _recipientId!: Snowflake ; // ID of the recipient in this DM channel
     protected lastMessageId: Snowflake | null = null; // Last message ID in this DM channel
 
 
@@ -14,6 +15,7 @@ export class DMChannel extends BaseChannel {
         super(client, data);
         this._type = ChannelType.DM;
         this._messages = new DMMessageManager(this);
+
         this.patch(data);
     }
     public get type(): ChannelType {
@@ -25,17 +27,18 @@ export class DMChannel extends BaseChannel {
     public get recipient(): Snowflake | null {
         return this.client.users.cache.get(this.recipientId);
     }
-
+    public get recipientId(): Snowflake {
+        return this.recipientId;
+    }
     public patch(data: any) {
         super.patch(data);
 
-        if (data.recipients) {
-            const recipient = data.recipients[0];
-            this.recipientId = recipient[0];
-            this.client.users.add(recipient); // Todo todo1
+        if (data.recipientId) {
+            this._recipientId = data.recipientId;
+            this.client.users.add(data.recipientId); // Todo todo1
         }
 
-        if ('last_message_id' in data) {
+        if (data.last_message_id) {
             this.lastMessageId = data.last_message_id;
         }
     }
@@ -44,7 +47,7 @@ export class DMChannel extends BaseChannel {
         return this.lastMessageId ? this.messages.cache.get(this.lastMessageId) : null;
     }
 
-    public send(content: string) {  
+    public send(content: Message | string) {  
         // TODO: Implement send method to send a message in this DM channel
     }
     toString() {

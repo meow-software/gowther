@@ -1,5 +1,5 @@
 import { Snowflake } from "@tellme/shared-types";
-import { BaseChannel, channelBuilder, Guild, Routes } from "..";
+import { BaseChannel, channelBuilder, GowtherError, GowtherErrorCodes, Guild, GuildChannel, Routes } from "..";
 import { CachedManager, DataType } from "./cachedManager";
 
 /**
@@ -36,7 +36,7 @@ export class ChannelManager extends CachedManager<BaseChannel> {
     public add(
         data: BaseChannel,
         params: { guild?: Guild; cache?: boolean; allowUnknownGuild?: boolean } = {} as any
-    ): BaseChannel | null {
+    ): BaseChannel {
         // { guild: Guild, cache? = true, allowUnknownGuild? = false } = {} 
         const { guild, cache = true, allowUnknownGuild = false } = params;
 
@@ -47,7 +47,7 @@ export class ChannelManager extends CachedManager<BaseChannel> {
             if (cache) existing.patch(data);
 
             // Add the channel to the guild's cache (if the guild exists)
-            guild?.channels?.add(existing);
+            guild?.channels?.add(existing as GuildChannel);
 
             // TODO: Check the channel type and add it to its parent's thread list if needed
             return existing;
@@ -56,8 +56,7 @@ export class ChannelManager extends CachedManager<BaseChannel> {
         // Channel not found in cache — create a new one 
         const channel = channelBuilder(this.client, data, allowUnknownGuild, guild);
         if (!channel) {
-            // TODO: Replace with a proper custom gowther error (e.g., "Failed to create channel: unknown guild or invalid type")
-            return null;
+            new GowtherError(GowtherErrorCodes.InvalidType, "Failed to create channel: unknown guild or invalid type");
         }
 
         // Store the new channel in the cache if allowed

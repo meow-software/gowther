@@ -1,5 +1,6 @@
 import { BaseClient } from "../client";
-import { BaseChannel, DMChannel, Guild } from "../structures";
+import { GowtherError, GowtherErrorCodes } from "../errors";
+import { BaseChannel, DMChannel, Guild, TextChannel } from "../structures";
 import { ChannelType } from "@tellme/shared-types";
 // TODO: Synchronise with ChannelType in Backend his
 
@@ -18,17 +19,17 @@ export function channelBuilder(client: BaseClient, data: any, allowUnknownGuild:
         // we have a guild or we can create channel without guild
         switch (data.type) {
             case ChannelType.GuildText: {
-                channel = new TextChannel(resolvedGuild, data, client);
+                channel = new TextChannel(client, data, resolvedGuild);
                 break;
             }
 
             case ChannelType.GuildVoice: {
-                // channel = new VoiceChannel(resolvedGuild, data, client);
+                // channel = new VoiceChannel(client, data, resolvedGuild));
                 break;
             }
 
             case ChannelType.GuildCategory: {
-                // channel = new CategoryChannel(resolvedGuild, data, client);
+                // channel = new CategoryChannel(client, data, resolvedGuild));
                 break;
             }
             // Others channel type
@@ -37,7 +38,10 @@ export function channelBuilder(client: BaseClient, data: any, allowUnknownGuild:
                 break;
         }
         // we have an guild and not permit to create channel without guild
-        if (channel && !allowUnknownGuild) resolvedGuild.channels?.cache.set(channel.id, channel);
+        if (channel && !allowUnknownGuild && !!resolvedGuild) resolvedGuild.channels?.cache.set(channel.id, channel);
+        if (!guild) {
+            throw new GowtherError(GowtherErrorCodes.InvalidType, "Guild is not found.");
+        }
     }
     return channel
 }

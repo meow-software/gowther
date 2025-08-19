@@ -1,9 +1,10 @@
 import { EventEmitter } from 'events'; 
 import { IRest, Rest } from './rest'; 
-import { DefaultClientOptions, IClientOptions } from '../utils/types';
+import { DefaultClientOptions, IClientOptions } from '@tellme/shared-types';
 import { IWsGateway, WsGateway } from './ws-gateway';
 import { ActionsRegister } from '../actions';
-import { ChannelManager, GuildManager } from '../manager';
+import { ChannelManager, GuildManager, UserManager } from '../manager';
+import { User } from '../structures';
 
 export interface IBaseClient {
     rest: IRest;
@@ -35,6 +36,8 @@ export abstract class BaseClient extends EventEmitter implements IBaseClient {
 
     protected _guilds : GuildManager; 
 
+    protected _users : UserManager; 
+
     /** Cache manager for channels */
     public channels: ChannelManager; 
     /**
@@ -60,6 +63,8 @@ export abstract class BaseClient extends EventEmitter implements IBaseClient {
         // Initialize cache managers
         this.channels = new ChannelManager(this);
         this._guilds = new GuildManager(this); 
+
+        this._users = new UserManager(this); 
     }
 
     public get guilds() : GuildManager {
@@ -69,7 +74,11 @@ export abstract class BaseClient extends EventEmitter implements IBaseClient {
         return this._actions;   
     }
  
-    abstract get user() : User; // Todo: Implement user property todo1
+    public get users() : UserManager {
+        return this._users;   
+    }
+    abstract get user() : User;
+    abstract setToken(token: string): void;
 
     /**
      * Returns the shard ID for this client instance, if any.

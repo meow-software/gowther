@@ -1,5 +1,6 @@
 import { BaseClient } from "../../client";
 import { GuildMessageManager } from "../../manager";
+import { Guild } from "../guild";
 import { GuildChannel } from "../guildChannel";
 import { ChannelType, Snowflake } from "@tellme/shared-types";
 
@@ -10,8 +11,8 @@ export abstract class BaseGuildTextChannel extends GuildChannel {
     protected _topic: string="";
     protected _lastMessageId: Snowflake | null = null; // Last message ID in this channel
 
-    constructor(client: BaseClient, data: any) {
-        super(client, data);
+    constructor(client: BaseClient,  data: any, guild?: Guild) {
+        super(client, data, guild);
         this._type = ChannelType.GuildText;
         this._messages = new GuildMessageManager(this);
         this.patch(data);

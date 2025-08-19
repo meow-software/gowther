@@ -8,3 +8,5 @@ export * from './textChannel';
 export * from './categoryChannel';
 export * from './guildChannel';
 export * from './guild'
+export * from './user';
+export * from './clientUser';

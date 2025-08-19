@@ -9,15 +9,17 @@ export class GuildChannel extends BaseChannel {
     protected _rawPosition: number;
     protected _parentId: Snowflake | null;
     protected _guildId: Snowflake;
+    protected _guild: Guild | undefined;
 
     // Todo: Implement guild channel specific properties and methods
     // permissions etc.
-    constructor(client: BaseClient, data: any) {
+    constructor(client: BaseClient, data: any, guild?: Guild) {
         super(client, data);
-        this._guildId = data.guildId;
         this._name = data.name;
         this._rawPosition = data.position;
         this._parentId = data.parentId || null;
+        this._guild = guild;
+        this._guildId = guild ? guild.id : data.guildId;
         this.patch(data);
     }
 
@@ -35,7 +37,8 @@ export class GuildChannel extends BaseChannel {
         return this._rawPosition;
     }
     get guild(): Guild {
-        const guild = this.client.guilds.resolve(this._guildId);
+        let guild : Guild | undefined | null = this._guild;
+        if (!guild) guild = this.client.guilds.resolve(this._guildId);
         if (!guild) {
             throw new GowtherError(GowtherErrorCodes.InvalidType, "Guild is unexpectedly null.");
         }

@@ -28,7 +28,10 @@ export enum GowtherErrorCodes {
     InvalidType,
 
     /** Action is not registered */ 
-    ActionNotRegistered = 'ActionNotRegistered',
+    ActionNotRegistered,
+    
+    /** User does not have a DM channel */
+    UserNoDMChannel,
 }
 
 /**
@@ -53,4 +56,5 @@ export const Messages: ErrorMessages = {
     [GowtherErrorCodes.ChannelNotCached]: "The channel was not cached.",
     [GowtherErrorCodes.InvalidType]: "The provided value is not of the expected type.",
     [GowtherErrorCodes.ActionNotRegistered]: "The requested action is not registered.",
+    [GowtherErrorCodes.UserNoDMChannel]: "The user does not have a DM channel.",
 };
