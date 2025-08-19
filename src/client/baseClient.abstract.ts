@@ -69,7 +69,7 @@ export abstract class BaseClient extends EventEmitter implements IBaseClient {
         return this._actions;   
     }
  
-    abstract get user() : User; // Todo: Implement user property
+    abstract get user() : User; // Todo: Implement user property todo1
 
     /**
      * Returns the shard ID for this client instance, if any.

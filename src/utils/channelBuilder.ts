@@ -1,6 +1,6 @@
 import { BaseClient } from "../client";
-import { BaseChannel, Guild } from "../structures";
-import { ChannelType } from "./types";
+import { BaseChannel, DMChannel, Guild } from "../structures";
+import { ChannelType } from "@tellme/shared-types";
 // TODO: Synchronise with ChannelType in Backend his
 
 export function channelBuilder(client: BaseClient, data: any, allowUnknownGuild: boolean,  guild?: Guild) : BaseChannel{
