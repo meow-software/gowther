@@ -22,7 +22,7 @@ export class ActionsRegister {
    */
   public register(action: typeof Action) {
     const instance = new action(this.client);
-    this.actions.set(action.name, instance);
+    this.actions.set(action.name.replace(/Action$/, ""), instance); // remove "Action"
   }
 
   /**

@@ -42,6 +42,6 @@ export class GuildChannelManager extends CachedManager<GuildChannel> {
         const id = this.resolveId(channel);
         if (!id) throw new GowtherError(GowtherErrorCodes.InvalidType, 'channel cannot be resolved to a valid ID.');
         await this.client.rest.delete(Routes.channel(id), jsonRestRequest({ reason }));
-        this.client.actions.handle("ChannelDeleteAction", { id });
+        this.client.actions.handle("ChannelDelete", { id });
     }
 }

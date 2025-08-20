@@ -38,6 +38,7 @@ export abstract class BaseClient extends EventEmitter implements IBaseClient {
 
     protected _users : UserManager; 
 
+    abstract user : User;
     /** Cache manager for channels */
     public channels: ChannelManager; 
     /**
@@ -77,7 +78,6 @@ export abstract class BaseClient extends EventEmitter implements IBaseClient {
     public get users() : UserManager {
         return this._users;   
     }
-    abstract get user() : User;
     abstract setToken(token: string): void;
 
     /**

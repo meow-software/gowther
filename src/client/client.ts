@@ -5,15 +5,15 @@ import { ClientUser, User } from '../structures';
 export class Client extends BaseClient {
   private readyTimestamp = null;
   protected token: string | null = null;
-  private _user!: User; // Todo: Implement User class
+  public user!: User;
 
   constructor(options?: Partial<IClientOptions>) {
     super(options);
 
   }
-  get user() {
-    return this._user;
-  }
+  // get user() {
+  //   return this._user;
+  // }
   setToken(token: string) {
     this.token = token;
   }
@@ -31,13 +31,6 @@ export class Client extends BaseClient {
     // Start the WebSocket connection via the WsGateway
     this.wsGateway.connect();
     
-    this._user = new ClientUser(this, {
-      id: '123456789012345678',
-      username: 'exampleUser',
-      avatar: null,
-      bot: false,
-    });
-
     // Handle 'connected' event from the WebSocket gateway
     this.on('connected', () => {
       // Emit a 'ready' event once the client is successfully connected

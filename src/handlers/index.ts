@@ -1,4 +1,7 @@
+
+import READY from './ready';
 import CHANNEL_CREATE from './channelCreate';
+
 
 /**
  * Type definition for a WebSocket packet handler.
@@ -16,5 +19,7 @@ type WsPacketHandler = (client: any, packet: any, ...args) => void;
 export const WsPacketHandlers: {
   [event: string]: WsPacketHandler;
 } = {
+  READY,
   CHANNEL_CREATE,
+
 };
