@@ -8,4 +8,7 @@ export default (client: BaseClient, packet) => {
     else {
         client.user = new ClientUser(client, data.user);
     }
+    for (const guild of data.guilds) {
+        client.guilds.add(guild);
+    }
 };
