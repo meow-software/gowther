@@ -1,3 +1,4 @@
+import { RequestData } from "@tellme/shared-types";
 
 /**
  * Utility function to create a JSON-compatible request body and headers
@@ -17,12 +18,14 @@
 export function jsonRestRequest(
   body: any,
   headers: Record<string, string> = {}
-) {
+) : RequestData {
   return {
-    body: JSON.stringify(body),
-    headers: {
-      "Content-Type": "application/json",
-      ...headers, // allows overwriting or adding custom headers
+    options: {
+      body: JSON.stringify(body),
+      headers: {
+        "Content-Type": "application/json",
+        ...headers,
+      },
     },
   };
 }

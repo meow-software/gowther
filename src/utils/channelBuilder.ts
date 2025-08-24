@@ -12,23 +12,23 @@ export function channelBuilder(client: BaseClient, data: any, allowUnknownGuild:
     if (!data.guildId && !resolvedGuild) {
         if (data.type === ChannelType.DM) {
             channel = new DMChannel(client, data);
-        } else if (data.type === ChannelType.GroupDM) {
+        } else if (data.type === ChannelType.GROUP_DM) {
             // channel = new GroupDMChannel(client, data);
         }
     } else if (resolvedGuild || allowUnknownGuild) {
         // we have a guild or we can create channel without guild
         switch (data.type) {
-            case ChannelType.GuildText: {
+            case ChannelType.GUILD_TEXT: {
                 channel = new TextChannel(client, data, resolvedGuild);
                 break;
             }
 
-            case ChannelType.GuildVoice: {
+            case ChannelType.GUILD_VOICE: {
                 // channel = new VoiceChannel(client, data, resolvedGuild));
                 break;
             }
 
-            case ChannelType.GuildCategory: {
+            case ChannelType.GUILD_CATEGORY: {
                 // channel = new CategoryChannel(client, data, resolvedGuild));
                 break;
             }

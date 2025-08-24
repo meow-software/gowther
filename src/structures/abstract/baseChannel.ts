@@ -35,7 +35,7 @@ export class BaseChannel extends BaseData<BaseClient> {
     }
     
     isDMBased() {
-        return [ChannelType.DM, ChannelType.GroupDM].includes(this.type);
+        return [ChannelType.DM, ChannelType.GROUP_DM].includes(this.type);
     }
 
     isSendable() {

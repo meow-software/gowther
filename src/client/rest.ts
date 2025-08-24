@@ -1,5 +1,5 @@
 import { GowtherError, GowtherErrorCodes } from "../errors";
-import { AuthData, InternalRequest, IRestOptions, RequestData, RequestMethod, RouteLike } from "@tellme/shared-types";
+import { AuthData, InternalRequest, RequestData, IRestOptions, RequestMethod, RouteLike } from "@tellme/shared-types";
 
 export interface IRest {
     /**
@@ -127,137 +127,36 @@ export class Rest implements IRest {
         this._jwt = '';
     }
 
-    /**
-     * Transforms various types of input data into a `Uint8Array`.
-     *
-     * Supports:
-     * - Strings, booleans, and numbers (converted to string then encoded using UTF-8)
-     * - `Uint8Array` instances (returned as-is)
-     * - Typed array views (`Int8Array`, `Float32Array`, etc.) (converted to `Uint8Array`)
-     * - Node.js `Buffer` (converted to `Uint8Array`)
-     *
-     * @param data - The data to convert. Can be a `Buffer`, `Uint8Array`, `ArrayBufferView`, `boolean`, `number`, or `string`.
-     * @returns A `Uint8Array` containing the encoded data or data origin.
-     */
-    private toUint8Array(data: Buffer | Uint8Array | boolean | number | string): Uint8Array {
-        if (typeof data === 'string' || typeof data === 'boolean' || typeof data === 'number') {
-            return new TextEncoder().encode(String(data));
-        }
 
-        if (data instanceof Uint8Array) {
-            return data;
-        }
 
-        if (ArrayBuffer.isView(data)) {
-            const view = data as ArrayBufferView;
-            return new Uint8Array(view.buffer, view.byteOffset, view.byteLength);
-        }
-        return data;
-    }
-
-    /**
-     * Resolves and executes an HTTP request based on the given `InternalRequest` object.
-     *
-     * This method performs the following steps:
-     * 1. Prepares the full request URL, including query parameters.
-     * 2. Sets up request headers.
-     * 3. Handles authentication headers if required.
-     * 4. Prepares the request body, supporting JSON, FormData, and file uploads.
-     * 5. Executes the HTTP request using `fetch` and handles errors.
-     *
-     * @param request - The internal request object containing all necessary details.
-     * @returns A Promise resolving to the Fetch API `Response` object.
-     *
-     * @throws {GowtherError} Throws an error if the REST client is not initialized or if the HTTP response is not successful.
-     */
-    private async resolveRequest(request: InternalRequest): Promise<Response> {
+    private async request(req: InternalRequest): Promise<Response> {
         if (!this._options) {
-            // Ensure the REST client is properly initialized before proceeding
             throw new GowtherError(GowtherErrorCodes.RestClientNotInitialized);
         }
 
-        // 1. Prepare URL with query parameters if any
-        const url = new URL(request.fullRoute, this._options.baseURL);
-        if (request.query) {
-            request.query.forEach((value, key) => url.searchParams.append(key, value));
-        }
+        const url = new URL(req.fullRoute, this._options.baseURL);
+        const headers = new Headers(req.options?.headers);
 
-        // 2. Prepare headers by cloning existing ones from the request
-        const headers = new Headers(request.headers);
-
-        // 3. Handle authentication unless explicitly disabled
-        if (request.auth !== false) {
-            // Use default auth if request.auth is true, or use provided auth object
-            const auth = request.auth === true ? this.getDefaultAuth() : request.auth;
+        // Auth automatique
+        if (req.auth !== false) {
+            const auth = req.auth === true ? this.getDefaultAuth() : req.auth;
             if (auth) {
-                // Determine prefix (Bearer/Bot/other) with fallback
-                const prefix = auth.prefix || this._options.authPrefix || 'Bearer';
-                headers.set('Authorization', `${prefix} ${auth.token}`);
+                headers.set("Authorization", `${auth.prefix || this._options.authPrefix || "Bearer"} ${auth.token}`);
             }
         }
 
-        // 4. Prepare request body
-        let body: BodyInit | undefined;
-        if (request.body) {
-            if (request.passThroughBody && !request.files) {
-                // Pass body as-is if passthrough enabled and no files
-                body = request.body;
-            } else if (request.files?.length) {
-                // If files are present, construct FormData payload
-                const formData = new FormData();
-
-                // Append JSON payload depending on flag
-                if (!request.appendToFormData && request.body) {
-                    formData.append('payload_json', JSON.stringify(request.body));
-                } else if (request.body) {
-                    for (const [key, value] of Object.entries(request.body)) {
-                        formData.append(key, JSON.stringify(value));
-                    }
-                }
-
-                // Append each file as a Blob with proper content type and filename
-                for (let i = 0; i < request.files.length; i++) {
-                    const file = request.files[i];
-                    const fileKey = file.key ?? `files[${i}]`;
-                    const fileData = this.toUint8Array(file.data);
-
-                    const blobOptions: BlobPropertyBag = {};
-                    if (file.contentType) {
-                        blobOptions.type = file.contentType;
-                    }
-
-                    formData.append(
-                        fileKey,
-                        new Blob([fileData], blobOptions),
-                        file.name
-                    );
-                }
-
-                body = formData;
-            } else {
-                // Default: send body as JSON with appropriate header
-                headers.set('Content-Type', 'application/json');
-                body = JSON.stringify(request.body);
-            }
-        }
-
-        // 5. Execute the HTTP request using fetch
-        const response = await fetch(url.toString(), {
-            method: request.method,
+        const res = await fetch(url.toString(), {
+            ...req.options,
+            method: req.method,
             headers,
-            body,
         });
 
-        // Check if response is OK (status in the range 200-299)
-        if (!response.ok) {
-            // Throw error with HTTP status code if request failed
-            throw new GowtherError(GowtherErrorCodes.HttpError, String(response.status));
+        if (!res.ok) {
+            throw new GowtherError(GowtherErrorCodes.HttpError, String(res.status));
         }
 
-        // Return the successful response
-        return response;
+        return res;
     }
-    
     /**
      * Retrieves the default authorization data if a token is set.
      * 
@@ -280,7 +179,7 @@ export class Rest implements IRest {
      * @returns A Promise resolving to the Fetch API Response.
      */
     public async get(route: RouteLike, options?: RequestData): Promise<Response> {
-        return this.resolveRequest({
+        return this.request({
             fullRoute: route,
             method: RequestMethod.Get,
             ...options,
@@ -295,7 +194,7 @@ export class Rest implements IRest {
      * @returns A Promise resolving to the Fetch API Response.
      */
     public async post(route: RouteLike, options?: RequestData): Promise<Response> {
-        return this.resolveRequest({
+        return this.request({
             fullRoute: route,
             method: RequestMethod.Post,
             ...options,
@@ -310,7 +209,7 @@ export class Rest implements IRest {
      * @returns A Promise resolving to the Fetch API Response.
      */
     public async put(route: RouteLike, options?: RequestData): Promise<Response> {
-        return this.resolveRequest({
+        return this.request({
             fullRoute: route,
             method: RequestMethod.Put,
             ...options,
@@ -325,7 +224,7 @@ export class Rest implements IRest {
      * @returns A Promise resolving to the Fetch API Response.
      */
     public async delete(route: RouteLike, options?: RequestData): Promise<Response> {
-        return this.resolveRequest({
+        return this.request({
             fullRoute: route,
             method: RequestMethod.Delete,
             ...options,
@@ -340,7 +239,7 @@ export class Rest implements IRest {
      * @returns A Promise resolving to the Fetch API Response.
      */
     public async patch(route: RouteLike, options?: RequestData): Promise<Response> {
-        return this.resolveRequest({
+        return this.request({
             fullRoute: route,
             method: RequestMethod.Patch,
             ...options,

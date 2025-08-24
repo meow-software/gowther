@@ -13,7 +13,7 @@ export abstract class BaseGuildTextChannel extends GuildChannel {
 
     constructor(client: BaseClient,  data: any, guild?: Guild) {
         super(client, data, guild);
-        this._type = ChannelType.GuildText;
+        this._type = ChannelType.GUILD_TEXT;
         this._messages = new GuildMessageManager(this);
         this.patch(data);
     }

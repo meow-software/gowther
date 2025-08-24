@@ -9,7 +9,7 @@ export class CategoryChannel extends GuildChannel {
 
     constructor(client: BaseClient, data: any) {
         super(client, data);
-        this._type = ChannelType.GuildCategory;
+        this._type = ChannelType.GUILD_CATEGORY;
         this._children = new CategoryChannelChildManager(this);
         this.patch(data);
     }
